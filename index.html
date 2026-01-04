@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Blank White Website</title>
   <style>
-    body {
+  <script>(()=>{let c=document.createElement('canvas'),x=c.getContext('2d');document.body.appendChild(c);Object.assign(c.style,{position:'fixed',top:0,left:0,zIndex:-1});function r(){c.width=innerWidth;c.height=innerHeight}r();addEventListener('resize',r);let t=0;!function a(){t+=0.02;x.fillStyle='rgba(0,0,0,0.2)';x.fillRect(0,0,c.width,c.height);for(let y=0;y<c.height;y+=3){let g=50+Math.sin(y*0.05+t)*200;x.fillStyle=`rgba(${g},255,180,0.15)`;x.fillRect(0,y,c.width,1)}for(let i=0;i<800;i++){x.fillStyle=`rgba(0,255,200,${Math.random()*0.15})`;x.fillRect(Math.random()*c.width,Math.random()*c.height,1,1)}requestAnimationFrame(a)}()})();</script>  body {
       background-color: black; 
       font-family: Arial Narrow, sans-serif; 
       color: white; 
@@ -27,6 +27,7 @@
 
 </body>
 </html>
+
 
 
 
