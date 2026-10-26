@@ -222,6 +222,33 @@
       color-scheme: normal;
     }
 
+    /* Background music toggle */
+    .music-btn {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 10;
+      font: inherit;
+      font-size: 1rem;
+      color: var(--ink);
+      background: var(--paper);
+      border: 4px solid var(--ink);
+      border-radius: 10px;
+      padding: 8px 14px;
+      cursor: pointer;
+      box-shadow:
+        inset 0 0 0 2px var(--paper),
+        inset 0 0 0 4px var(--trim),
+        4px 4px 0 var(--shadow);
+    }
+
+    .music-btn:hover { color: var(--link-hover); }
+
+    .music-btn:focus-visible {
+      outline: 3px solid var(--link);
+      outline-offset: 3px;
+    }
+
     @media (max-width: 640px) {
       body { font-size: 1.125rem; }
       .page { padding: 32px 14px 56px; gap: 24px; }
@@ -269,6 +296,9 @@
 </head>
 <body>
   <canvas id="sky" aria-hidden="true"></canvas>
+
+  <audio id="bgm" src="background.mp3" loop preload="auto"></audio>
+  <button class="music-btn" id="musicBtn" type="button" aria-pressed="false">♪ music: off</button>
 
   <main class="page">
 
@@ -454,6 +484,53 @@
         }
       }
       ctx.putImageData(img, 0, 0);
+    })();
+
+    // Background music: starts on first click/tap, toggle with the button
+    (function () {
+      var audio = document.getElementById('bgm');
+      var btn = document.getElementById('musicBtn');
+      if (!audio || !btn) return;
+
+      audio.volume = 0.4;
+      var wantsMusic = true; // plays on first interaction unless the visitor turns it off
+
+      function setLabel() {
+        var on = !audio.paused;
+        btn.textContent = on ? '♪ music: on' : '♪ music: off';
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      }
+
+      function start() {
+        if (!wantsMusic) return;
+        var p = audio.play();
+        if (p && p.catch) p.catch(function () {});
+        setLabel();
+      }
+
+      // Try straight away (works if the browser allows it), then fall back to first interaction
+      start();
+      ['pointerdown', 'keydown', 'touchstart'].forEach(function (evt) {
+        window.addEventListener(evt, function once(e) {
+          if (e.target === btn) return;
+          start();
+          window.removeEventListener(evt, once);
+        }, { passive: true });
+      });
+
+      btn.addEventListener('click', function () {
+        if (audio.paused) {
+          wantsMusic = true;
+          audio.play().catch(function () {});
+        } else {
+          wantsMusic = false;
+          audio.pause();
+        }
+        setLabel();
+      });
+
+      audio.addEventListener('play', setLabel);
+      audio.addEventListener('pause', setLabel);
     })();
   </script>
 </body>
