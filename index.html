@@ -2,44 +2,374 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Blank White Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE TV WEBSITE</title>
   <style>
-    body {
-      background-color: black; 
-      font-family: Arial Narrow, sans-serif; 
-      color: white; 
-      margin: 20px;
+    :root {
+      --ink: #14142b;
+      --paper: #fbfbf6;
+      --trim: #7f93c4;
+      --link: #0b3a8f;
+      --link-hover: #1f63d6;
+      --shadow: rgba(4, 11, 36, 0.55);
     }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(#040b24, #0a3f9a);
+      background-attachment: fixed;
+      color: var(--ink);
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #sky {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      z-index: -1;
+    }
+
+    .page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 64px 20px 88px;
+      display: grid;
+      gap: 30px;
+    }
+
+    /* Dialogue box */
+    .box {
+      position: relative;
+      background: var(--paper);
+      border: 4px solid var(--ink);
+      border-radius: 14px;
+      padding: 24px 52px 26px 28px;
+      box-shadow:
+        inset 0 0 0 3px var(--paper),
+        inset 0 0 0 6px var(--trim),
+        6px 6px 0 var(--shadow);
+    }
+
+    .box p { margin: 0; max-width: 60ch; }
+
+    /* "More to read" marker, bottom right */
+    .box.text::after {
+      content: "";
+      position: absolute;
+      right: 22px;
+      bottom: 18px;
+      width: 14px;
+      height: 10px;
+      background: var(--ink);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      animation: blink 1.1s steps(1) infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .box.text::after { animation: none; }
+    }
+
     a {
-      color: blue; 
-      text-decoration: underline; 
+      color: var(--link);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+    }
+
+    a:hover { color: var(--link-hover); }
+
+    a:focus-visible,
+    iframe:focus-visible {
+      outline: 3px solid var(--link);
+      outline-offset: 3px;
+    }
+
+    /* Title: the TV does the talking */
+    .hero {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      margin-bottom: 8px;
+    }
+
+    .tv {
+      flex: 0 0 auto;
+      width: 150px;
+      height: auto;
+      filter: drop-shadow(5px 5px 0 var(--shadow));
+    }
+
+    .box.title {
+      flex: 1;
+      padding: 30px 32px;
+    }
+
+    .box.title::before,
+    .box.title::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 0;
+      height: 0;
+      border-style: solid;
+    }
+
+    .box.title::before {
+      left: -26px;
+      transform: translateY(-50%);
+      border-width: 16px 26px 16px 0;
+      border-color: transparent var(--ink) transparent transparent;
+    }
+
+    .box.title::after {
+      left: -22px;
+      transform: translateY(-50%);
+      border-width: 13px 22px 13px 0;
+      border-color: transparent var(--paper) transparent transparent;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 6.4vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.04em;
+    }
+
+    /* Video frames */
+    .box.media {
+      padding: 14px;
+    }
+
+    .video {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #05101f;
+      border: 3px solid var(--ink);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .video iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    @media (max-width: 640px) {
+      body { font-size: 1.125rem; }
+      .page { padding: 32px 14px 56px; gap: 24px; }
+      .box { padding: 20px 40px 22px 20px; }
+      .box.media { padding: 10px; }
+
+      .hero {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+      }
+
+      .tv { width: 120px; }
+
+      .box.title { width: 100%; padding: 24px 20px; text-align: center; }
+
+      .box.title::before,
+      .box.title::after {
+        top: auto;
+        left: 50%;
+      }
+
+      .box.title::before {
+        top: -26px;
+        transform: translateX(-50%);
+        border-width: 0 16px 26px 16px;
+        border-color: transparent transparent var(--ink) transparent;
+      }
+
+      .box.title::after {
+        top: -22px;
+        transform: translateX(-50%);
+        border-width: 0 13px 22px 13px;
+        border-color: transparent transparent var(--paper) transparent;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>THE TV WEBSITE</h1>
- <p>Helooooo, I just released an EP... it's called 'A Half Mind Missing People' and this <a href="https://open.spotify.com/album/0cj8K8q6KmJFgghMbNCyHc">link</a> takes ya straight to it.</p>
-     <p> This next link (click <a href=https://drive.google.com/file/d/1peVWFo-FYlaRcU9Gkc2nyI3LPMAJH5Y8/view?usp=sharing>here</a> ) takes you to 3 demos i made during this ^^ EP. They were made intentionally more lo fi and fun maybe...
-      also on this <a href=https:https://drive.google.com/file/d/1czDvdyvkUW9RwR_Y22G3HaTOHYck6bz-/view?usp=sharinge>link</a> is a weird as SAMPLE PACK (or select fraction of) i made over the course of last year. please download and use at ur leisure, theres some wacky shit on there.
-     <p> 
-    </p> I also have some examples of Sound Design Work just below... 
-<iframe
-  width="100%"
-  height="400"
-  src="https://www.youtube.com/embed/ku_jvCWubDE"
-  title="YouTube video player"
-  frameborder="0"
-  allowfullscreen>
-</iframe>
-<iframe
-  width="100%"
-  height="400"
-  src="https://www.youtube.com/embed/ue_dViF40pg"
-  title="YouTube video player"
-  frameborder="0"
-  allowfullscreen>
-</iframe>
+  <canvas id="sky" aria-hidden="true"></canvas>
+
+  <main class="page">
+
+    <div class="hero">
+      <svg class="tv" viewBox="0 0 20 17" shape-rendering="crispEdges" aria-hidden="true">
+        <!-- antenna -->
+        <rect x="9" y="2" width="2" height="1" fill="#14142b"/>
+        <rect x="8" y="2" width="1" height="1" fill="#14142b"/>
+        <rect x="7" y="1" width="1" height="1" fill="#14142b"/>
+        <rect x="6" y="0" width="1" height="1" fill="#14142b"/>
+        <rect x="11" y="2" width="1" height="1" fill="#14142b"/>
+        <rect x="12" y="1" width="1" height="1" fill="#14142b"/>
+        <rect x="13" y="0" width="1" height="1" fill="#14142b"/>
+        <!-- body -->
+        <rect x="1" y="3" width="18" height="12" fill="#14142b"/>
+        <rect x="2" y="4" width="16" height="10" fill="#e0563a"/>
+        <rect x="2" y="4" width="16" height="1" fill="#f08a6a"/>
+        <!-- screen -->
+        <rect x="3" y="5" width="9" height="8" fill="#14142b"/>
+        <rect x="4" y="6" width="7" height="6" fill="#0a2b22"/>
+        <rect x="5" y="7" width="1" height="2" fill="#8dffb0"/>
+        <rect x="9" y="7" width="1" height="2" fill="#8dffb0"/>
+        <rect x="5" y="10" width="1" height="1" fill="#8dffb0"/>
+        <rect x="9" y="10" width="1" height="1" fill="#8dffb0"/>
+        <rect x="6" y="11" width="3" height="1" fill="#8dffb0"/>
+        <!-- controls -->
+        <rect x="13" y="6" width="4" height="4" fill="#14142b"/>
+        <rect x="14" y="7" width="2" height="2" fill="#bcbcc8"/>
+        <rect x="13" y="11" width="4" height="1" fill="#14142b"/>
+        <rect x="13" y="13" width="4" height="1" fill="#14142b"/>
+        <!-- legs -->
+        <rect x="4" y="15" width="2" height="2" fill="#14142b"/>
+        <rect x="14" y="15" width="2" height="2" fill="#14142b"/>
+      </svg>
+
+      <div class="box title">
+        <h1>THE TV WEBSITE</h1>
+      </div>
+    </div>
+
+    <div class="box text">
+      <p>Helooooo, I just released an EP... it’s called ‘A Half Mind Missing People’ and this <a href="https://open.spotify.com/album/0cj8K8q6KmJFgghMbNCyHc" target="_blank" rel="noopener noreferrer">link</a> takes ya straight to it.</p>
+    </div>
+
+    <div class="box text">
+      <p>This next link (click <a href="https://drive.google.com/file/d/1peVWFo-FYlaRcU9Gkc2nyI3LPMAJH5Y8/view?usp=sharing" target="_blank" rel="noopener noreferrer">here</a>) takes you to 3 demos i made during this ^^ EP. They were made intentionally more lo fi and fun maybe...</p>
+    </div>
+
+    <div class="box text">
+      <p>also on this <a href="https://drive.google.com/file/d/1czDvdyvkUW9RwR_Y22G3HaTOHYck6bz-/view?usp=sharing" target="_blank" rel="noopener noreferrer">link</a> is a weird as SAMPLE PACK (or select fraction of) i made over the course of last year. please download and use at ur leisure, theres some wacky shit on there.</p>
+    </div>
+
+    <div class="box text">
+      <p>I also have some examples of Sound Design Work just below...</p>
+    </div>
+
+    <div class="box media">
+      <div class="video">
+        <iframe
+          src="https://www.youtube.com/embed/ku_jvCWubDE"
+          title="Sound design example 1"
+          loading="lazy"
+          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+    <div class="box media">
+      <div class="video">
+        <iframe
+          src="https://www.youtube.com/embed/ue_dViF40pg"
+          title="Sound design example 2"
+          loading="lazy"
+          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Pixelated night sky: low-resolution canvas, ordered-dither gradient and
+    // value-noise clouds, scaled up with hard pixel edges. Generated once.
+    (function () {
+      var canvas = document.getElementById('sky');
+      if (!canvas || !canvas.getContext) return;
+      var W = 200, H = 113;
+      canvas.width = W;
+      canvas.height = H;
+      var ctx = canvas.getContext('2d');
+      var img = ctx.createImageData(W, H);
+
+      var BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+      function bayer(x, y) { return (BAYER[(y & 3) * 4 + (x & 3)] / 16) - 0.5; }
+
+      function hash(ix, iy) {
+        var n = ix * 374761393 + iy * 668265263 + 1274126177;
+        n = (n ^ (n >>> 13)) * 1274126177;
+        n = n ^ (n >>> 16);
+        return ((n >>> 0) % 100000) / 100000;
+      }
+      function smooth(t) { return t * t * (3 - 2 * t); }
+      function vnoise(x, y) {
+        var ix = Math.floor(x), iy = Math.floor(y);
+        var fx = smooth(x - ix), fy = smooth(y - iy);
+        var a = hash(ix, iy), b = hash(ix + 1, iy);
+        var c = hash(ix, iy + 1), d = hash(ix + 1, iy + 1);
+        var top = a + (b - a) * fx;
+        var bottom = c + (d - c) * fx;
+        return top + (bottom - top) * fy;
+      }
+      function fbm(x, y) {
+        var v = 0, amp = 0.5, f = 1;
+        for (var o = 0; o < 4; o++) {
+          v += amp * vnoise(x * f, y * f);
+          amp *= 0.5; f *= 2;
+        }
+        return v / 0.9375;
+      }
+      function dens(x, y) { return fbm(x * 0.034 + 7.3, y * 0.07 + 3.1); }
+
+      function hex(h) { return [(h >> 16) & 255, (h >> 8) & 255, h & 255]; }
+      var TOP = hex(0x040b24), BOT = hex(0x0a3f9a);
+      var EDGE = hex(0x2a56b0), MID = hex(0x6c9bea), HI = hex(0xb5d0ff), BRIGHT = hex(0xeef5ff), SHADE = hex(0x1c3c88);
+      var THR = 0.57;
+
+      for (var y = 0; y < H; y++) {
+        for (var x = 0; x < W; x++) {
+          var col;
+          var d = dens(x, y) + bayer(x, y) * 0.035;
+          if (d > THR) {
+            var c = d - THR;
+            col = c < 0.035 ? EDGE : (c < 0.1 ? MID : (c < 0.17 ? HI : BRIGHT));
+            if (dens(x, y + 2) + bayer(x, y + 2) * 0.035 <= THR) col = SHADE;
+          } else {
+            var t = y / (H - 1) + bayer(x, y) * 0.09;
+            t = Math.max(0, Math.min(1, t));
+            t = Math.round(t * 7) / 7;
+            col = [
+              TOP[0] + (BOT[0] - TOP[0]) * t,
+              TOP[1] + (BOT[1] - TOP[1]) * t,
+              TOP[2] + (BOT[2] - TOP[2]) * t
+            ];
+          }
+          var i = (y * W + x) * 4;
+          img.data[i] = col[0];
+          img.data[i + 1] = col[1];
+          img.data[i + 2] = col[2];
+          img.data[i + 3] = 255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+    })();
+  </script>
 </body>
 </html>
 
